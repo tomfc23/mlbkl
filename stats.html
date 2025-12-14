@@ -307,7 +307,7 @@
 
       // Sort and calculate medians
       const teamSorted = Object.entries(teamScores).sort((a,b)=>b[1]-a[1]);
-      const playerSorted = Array.from(karmaMap.entries()).sort((a,b)=>b[1].score-b[1].score);
+      const playerSorted = Array.from(karmaMap.entries()).sort((a,b)=>b[1].score-a[1].score);
       const teamValues = Object.values(teamScores);
       const playerValues = Array.from(karmaMap.values()).map(p => p.score);
       const teamMedian = teamValues.sort((a,b)=>a-b)[Math.floor(teamValues.length/2)] || 0;
@@ -319,10 +319,10 @@
         return { user, team: val.team, score: val.score, rel: rel.toFixed(2) };
       }).sort((a,b)=>b.rel-a.rel);
 
-      // Sort rank entries for top/bottom 5 karma ranks
+      // Sort rank entries for top/bottom 10 karma ranks
       const rankSorted = rankEntries.sort((a, b) => a.rank - b.rank);
-      const top5Ranks = rankSorted.slice(0, 5);
-      const bottom5Ranks = rankSorted.slice(-5).reverse();
+      const top10Ranks = rankSorted.slice(0, 10);
+      const bottom10Ranks = rankSorted.slice(-10).reverse();
 
       // Helper to build HTML sections for stats
       function buildSection(title, list, key, type) {
@@ -352,13 +352,13 @@
       stats.innerHTML = `
         ${buildSection('Top 3 Teams', teamSorted.slice(0,3), 1, 'team')}
         ${buildSection('Bottom 3 Teams', teamSorted.slice(-3).reverse(), 1, 'team')}
-        ${buildSection('Top 5 Players', playerSorted.slice(0,5).map(([user, val]) => ({ user, ...val })), 'score', 'player')}
-        ${buildSection('Bottom 5 Players', playerSorted.slice(-5).reverse().map(([user, val]) => ({ user, ...val })), 'score', 'player')}
+        ${buildSection('Top 10 Players', playerSorted.slice(0,10).map(([user, val]) => ({ user, ...val })), 'score', 'player')}
+        ${buildSection('Bottom 10 Players', playerSorted.slice(-10).reverse().map(([user, val]) => ({ user, ...val })), 'score', 'player')}
         ${buildSection('League Median Team Score', [["Median", teamMedian]], 1, 'team')}
         ${buildSection('League Median Player Score', [["Median", playerMedian]], 1, 'team')}
-        ${buildSection('Top 5 REL (Relative Performance)', relScores.slice(0,5), 'rel', 'player')}
-        ${buildSection('Top 5 User Karma Rank', top5Ranks, 'rank', 'player')}
-        ${buildSection('Bottom 5 User Karma Rank', bottom5Ranks, 'rank', 'player')}
+        ${buildSection('Top 10 REL (Relative Performance)', relScores.slice(0,10), 'rel', 'player')}
+        ${buildSection('Top 10 User Karma Rank', top10Ranks, 'rank', 'player')}
+        ${buildSection('Bottom 10 User Karma Rank', bottom10Ranks, 'rank', 'player')}
         <div class="stat-section">
           <div class="stat-title">
             Total Players Ranked Today: <span class="highlight">${rankEligibleCount}</span>
